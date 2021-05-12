@@ -1,42 +1,50 @@
-from pandas.core.frame import DataFrame
-from apriori import Arules
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib
-from PyARMViz.Rule import generate_rule_from_dict
-import PyARMViz
-import squarify
+from apriori import Arules
+
 
 MAIN_FILE_NAME = 'Project1 - groceries.csv'
-TEST_FILE_NAME = 'Project1 - groceries copy.csv'
-# MIN_SUPPORT = 0.055
 MIN_SUPPORT = 0.005
 MIN_CONFIDENCE = 0.2
-# MIN_CONFIDENCE = 0.4
 # MIN_LIFT = 
 
-df:DataFrame = pd.read_csv(MAIN_FILE_NAME, header = None, squeeze = True, keep_default_na=False)
+df = pd.read_csv(MAIN_FILE_NAME, header = None, squeeze = True, keep_default_na=False)
 a = Arules()
 a.get_frequent_item_sets(transactions=df.values, min_support=MIN_SUPPORT)
-print(f'number of frequent itemstes: {len(a.frequent_itemsets)}')
+
+
+# Performance Mode
 arules = a.get_arules(min_confidence=MIN_CONFIDENCE)
-print(f'number of association rules: {len(arules)}\n')
 for rule in arules:
     print('{%s -> %s, %s}' % rule)
-    # qq = (rule[0], rule[1], rule[4])
-# print(arules)
-# arules = [[1,2,3,4,5],(1,2,3,4,5),(1,2,3,4,5),(1,2,3,4,5),(1,2,3,4,5),(1,2,3,4,5)]
-# plt.scatter(['ali', 'arman','ghasemi','mohseni','reza','aghareza'],[a[2] for a in arules] ,alpha=0.5)
 
-# scatter
+# Diagram Mode
+# arules = a.get_arules_for_diagram(min_confidence=MIN_CONFIDENCE)
+# for rule in arules:
+#     print_attrs = (rule['lhs'], rule['rhs'], rule['lift'])
+#     print('{%s -> %s, %s}' % print_attrs)
+
+print(70*'-')
+print(f'number of frequent itemstes: {len(a.frequent_itemsets)}')
+print(f'number of association rules: {len(arules)}')
+
+######################### Diagram Drawing Packages #########################
+
+# import matplotlib
+# import matplotlib.pyplot as plt
+# import PyARMViz
+# import squarify
+# from PyARMViz.Rule import generate_rule_from_dict
+
+######################### Scatter #########################
+
 # plt.scatter([r['support'] for r in arules],[r['confidence'] for r in arules] ,alpha=0.5)
 # plt.xlabel('support')
 # plt.ylabel('confidence')
 # plt.title('Support vs Confidence')
 # plt.show()
 
+######################### Parallel Diagrams #########################
 
-# parallel diagrams
 # rules = []
 # for rd in arules: 
 #     rules.append(generate_rule_from_dict(rd))
@@ -45,9 +53,9 @@ for rule in arules:
 # PyARMViz.generate_rule_graph_plotly(rules)
 # PyARMViz.generate_rule_strength_plot(rules)
 
+######################### Frequency Diagram #########################
 
 # item = {"Count": [], "Item": []}
-# # print(sorted(a.num_of_occurrences.items(), reverse=True, key=lambda item: item[1])[:50])
 # for el in sorted(a.num_of_occurrences.items(), reverse=True, key=lambda item: item[1])[:50]:
 #     if len(el[0]) ==1:
 #         item["Item"].append(el[0][0])
@@ -67,49 +75,14 @@ for rule in arules:
 # ttl = ax.title
 # ttl.set_position([.5, 1.05])
 
+######################### Correctness Provement #########################
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-######################### Test that our code is true #########################
 # num = 0
 # t_num = len(df.values)
 # for rule in arules:
 #     num1=0
 #     num2=0
 #     num3=0
-
 #     for t in df.values:
 #         # print(set(rule[0]), set(rule[1]), set(t))
 #         t1=False
@@ -132,5 +105,4 @@ for rule in arules:
 #     if sup >= MIN_SUPPORT and conf >= MIN_CONFIDENCE:
 #         num+=1
 #     print(lift, rule[2])
-    
 # print(num)

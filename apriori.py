@@ -1,4 +1,4 @@
-from operator import itemgetter
+from operator import itemgetter, attrgetter
 from itertools import combinations, chain
 
 
@@ -7,6 +7,7 @@ class Arules:
         self.frequent_itemsets = list()
         self.num_of_occurrences = dict()
         self.num_of_transactions = 0
+
 
     def get_frequent_item_sets(self, transactions=None, min_support=None):
         self.num_of_transactions = len(transactions)
@@ -44,7 +45,6 @@ class Arules:
                     list_of_cur_dicts.append(starts_with_dict)
                     frequent_k_itemsets_num+=len(starts_with_dict)
             list_of_last_dicts = list_of_cur_dicts
-
         return self.frequent_itemsets
             
 
@@ -65,22 +65,39 @@ class Arules:
                 if lift < min_lift:
                     continue
                 arules.append((left_side, right_side, eval(sort_by)))
-                # arules.append((left_side, right_side, support, confidence, lift))
-                # arules.append({
-                #     "lhs": left_side,
-                #     "rhs": right_side,
-                #     "count_full": num_of_itemset_repeat,
-                #     "count_lhs": self.num_of_occurrences[left_side],
-                #     "count_rhs": self.num_of_occurrences[right_side],
-                #     "num_transactions": self.num_of_transactions,
-                #     "support": support,
-                #     "confidence": confidence,
-                #     "lift": lift
-                # })
         arules = sorted(arules, key=itemgetter(2), reverse=True)
-        # arules = sorted(arules, key=itemgetter(4), reverse=True)
         return arules
-    # sort_by: lift , confidence, support
+
+
+    # def get_arules_for_diagram(self, min_support=0, min_confidence=0, min_lift=0, sort_by='lift'):
+    #     arules = []
+    #     for itemset in self.frequent_itemsets:
+    #         subsets = list(chain.from_iterable(combinations(itemset, r) for r in range(1, len(itemset))))
+    #         num_of_itemset_repeat = self.num_of_occurrences[itemset]
+    #         support = num_of_itemset_repeat / self.num_of_transactions
+    #         if support < min_support:
+    #             continue
+    #         for index, left_side in enumerate(subsets, start=1):
+    #             right_side = subsets[len(subsets) - index]
+    #             confidence = num_of_itemset_repeat / self.num_of_occurrences[left_side]
+    #             if confidence < min_confidence:
+    #                 continue
+    #             lift = confidence * self.num_of_transactions / self.num_of_occurrences[right_side]
+    #             if lift < min_lift:
+    #                 continue
+    #             arules.append({
+    #                 "lhs": left_side,
+    #                 "rhs": right_side,
+    #                 "count_full": num_of_itemset_repeat,
+    #                 "count_lhs": self.num_of_occurrences[left_side],
+    #                 "count_rhs": self.num_of_occurrences[right_side],
+    #                 "num_transactions": self.num_of_transactions,
+    #                 "support": support,
+    #                 "confidence": confidence,
+    #                 "lift": lift
+    #             })
+    #     arules = sorted(arules, key=lambda obj: obj[sort_by], reverse=True)
+    #     return arules
 
 
     # def get_details(self, transactions=None, min_support=None, min_confidence=None):
