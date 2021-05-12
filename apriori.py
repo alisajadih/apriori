@@ -64,20 +64,20 @@ class Arules:
                 lift = confidence * self.num_of_transactions / self.num_of_occurrences[right_side]
                 if lift < min_lift:
                     continue
-                # arules.append((left_side, right_side, eval(sort_by)))
+                arules.append((left_side, right_side, eval(sort_by)))
                 # arules.append((left_side, right_side, support, confidence, lift))
-                arules.append({
-                    "lhs": left_side,
-                    "rhs": right_side,
-                    "count_full": num_of_itemset_repeat,
-                    "count_lhs": self.num_of_occurrences[left_side],
-                    "count_rhs": self.num_of_occurrences[right_side],
-                    "num_transactions": self.num_of_transactions,
-                    "support": support,
-                    "confidence": confidence,
-                    "lift": lift
-                })
-        # arules = sorted(arules, key=itemgetter(2), reverse=True)
+                # arules.append({
+                #     "lhs": left_side,
+                #     "rhs": right_side,
+                #     "count_full": num_of_itemset_repeat,
+                #     "count_lhs": self.num_of_occurrences[left_side],
+                #     "count_rhs": self.num_of_occurrences[right_side],
+                #     "num_transactions": self.num_of_transactions,
+                #     "support": support,
+                #     "confidence": confidence,
+                #     "lift": lift
+                # })
+        arules = sorted(arules, key=itemgetter(2), reverse=True)
         # arules = sorted(arules, key=itemgetter(4), reverse=True)
         return arules
     # sort_by: lift , confidence, support
